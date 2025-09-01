@@ -1,0 +1,127 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-titans-dark-blue mb-8">
+        {% if form.instance.pk %}Édition{% else %}Nouvelle{% endif %} Publication
+    </h1>
+    
+    <div class="card bg-white border border-titans-light-blue shadow-lg rounded-lg p-8">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="alert alert-error mb-6">
+                {% for error in form.non_field_errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Titre</span>
+                </label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                <div class="text-error text-sm mt-1">
+                    {% for error in form.title.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text">Contenu</span>
+                </label>
+                {{ form.content }}
+                {% if form.content.errors %}
+                <div class="text-error text-sm mt-1">
+                    {% for error in form.content.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Image</span>
+                    </label>
+                    {{ form.image }}
+                    {% if form.image.errors %}
+                    <div class="text-error text-sm mt-1">
+                        {% for error in form.image.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if form.instance.image %}
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-600">Image actuelle:</p>
+                        <img src="{{ form.instance.image.url }}" alt="Image actuelle" class="h-32 object-cover mt-2 rounded">
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Fichier vidéo</span>
+                    </label>
+                    {{ form.video }}
+                    {% if form.video.errors %}
+                    <div class="text-error text-sm mt-1">
+                        {% for error in form.video.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if form.instance.video %}
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-600">Vidéo actuelle:</p>
+                        <div class="mt-2 p-2 bg-gray-100 rounded">
+                            <span class="text-sm text-titans-dark-blue">{{ form.instance.video.name }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-control mb-6">
+                <label class="label">
+                    <span class="label-text">URL vidéo (YouTube/Vimeo)</span>
+                </label>
+                {{ form.video_url }}
+                {% if form.video_url.errors %}
+                <div class="text-error text-sm mt-1">
+                    {% for error in form.video_url.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% if form.instance.video_url %}
+                <div class="mt-2">
+                    <p class="text-sm text-gray-600">URL vidéo actuelle:</p>
+                    <a href="{{ form.instance.video_url }}" target="_blank" class="text-sm text-titans-light-blue hover:underline">
+                        {{ form.instance.video_url }}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="flex justify-end space-x-4">
+                <a href="{% url 'dashboard' %}" class="btn btn-ghost">Annuler</a>
+                <button type="submit" class="btn bg-titans-light-blue text-white hover:bg-titans-dark-blue">
+                    {% if form.instance.pk %}Mettre à jour{% else %}Publier{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

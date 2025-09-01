@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "titans"
+version = "0.1.0"
+description = ""
+authors = ["Ton Nom <email@example.com>"]
+# Ici uniquement : python requis
+packages = [{ include = "titans" }]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+django = "^5.0"
+
+[tool.poetry.dev-dependencies]
