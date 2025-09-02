@@ -69,7 +69,7 @@ def dashboard(request):
         'comments_count': comments_count
     })
 
-@login_required
+
 def post_create(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)

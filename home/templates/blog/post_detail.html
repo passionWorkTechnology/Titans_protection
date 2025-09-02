@@ -78,6 +78,8 @@
                 <i class="fas fa-arrow-left mr-2"></i>
                 Retour au blog
             </a>
+            
+           
             <h1 class="text-3xl md:text-4xl font-bold leading-tight">{{ post.title }}</h1>
             
             <div class="flex flex-wrap items-center mt-4 text-sm md:text-base">
@@ -187,7 +189,7 @@
         <div class="bg-blue-50 rounded-xl p-6 mb-8">
             <div class="flex items-center">
                 <div class="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold mr-4">
-                    {{ post.author.username|first|upper }}
+                    {{ post.author.username|first|upper }}  
                 </div>
                 <div>
                     <h3 class="font-bold text-lg">À propos de l'auteur</h3>
