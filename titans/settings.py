@@ -1,9 +1,11 @@
 """
 Django settings for titans project.
+Production-ready for Railway
 """
 
 from pathlib import Path
 import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,7 +16,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "insecure-key-for-dev")
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["*"]  # en prod, mets ton domaine Railway ou custom
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
 # -------------------
 # APPLICATIONS
@@ -62,15 +64,20 @@ WSGI_APPLICATION = 'titans.wsgi.application'
 # -------------------
 # DATABASE
 # -------------------
-# Railway te donne automatiquement une URL DATABASE_URL si tu actives PostgreSQL
-# Tu peux utiliser dj-database-url pour parser, sinon SQLite par défaut
+# Utilise PostgreSQL Railway si DATABASE_URL existe, sinon SQLite
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # -------------------
 # PASSWORD VALIDATION
@@ -95,7 +102,7 @@ USE_TZ = True
 # -------------------
 STATIC_URL = '/static/'
 
-# si tu as un dossier "static/" à la racine
+# si tu as un dossier "static/" pour tes assets perso
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -103,7 +110,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
-# WhiteNoise pour compresser les fichiers statiques
+# WhiteNoise pour compresser/servir les fichiers statiques
 STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
