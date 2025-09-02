@@ -1,6 +1,6 @@
 """
 Django settings for titans project.
-Production-ready for Railway
+Optimized for Railway deployment with Whitenoise and PostgreSQL
 """
 
 from pathlib import Path
@@ -16,7 +16,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "insecure-key-for-dev")
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")  # e.g. "*.railway.app"
 
 # -------------------
 # APPLICATIONS
@@ -33,7 +33,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # ⚡ doit être juste après SecurityMiddleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # ⚡ juste après SecurityMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -64,12 +64,10 @@ WSGI_APPLICATION = 'titans.wsgi.application'
 # -------------------
 # DATABASE
 # -------------------
-# Utilise PostgreSQL Railway si DATABASE_URL existe, sinon SQLite
 DATABASE_URL = os.environ.get("DATABASE_URL")
-
 if DATABASE_URL:
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
+        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
     }
 else:
     DATABASES = {
@@ -98,24 +96,16 @@ USE_I18N = True
 USE_TZ = True
 
 # -------------------
-# STATIC & MEDIA FILES
+# STATIC & MEDIA
 # -------------------
 STATIC_URL = '/static/'
-
-# si tu as un dossier "static/" pour tes assets perso
-STATICFILES_DIRS = [BASE_DIR / "static"]
-
+STATICFILES_DIRS = [BASE_DIR / "static"]  # dossier local
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
-# WhiteNoise pour compresser/servir les fichiers statiques
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # -------------------
 # DEFAULT PRIMARY KEY
