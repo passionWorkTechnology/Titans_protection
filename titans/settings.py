@@ -14,9 +14,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # -------------------
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "insecure-key-for-dev")
 
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")  # e.g. "*.railway.app"
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",") 
 
 # -------------------
 # APPLICATIONS
@@ -33,7 +33,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # ⚡ juste après SecurityMiddleware
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -99,7 +99,7 @@ USE_TZ = True
 # STATIC & MEDIA
 # -------------------
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]  # dossier local
+STATICFILES_DIRS = [BASE_DIR / "static"] 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = '/media/'
